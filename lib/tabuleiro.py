@@ -1,10 +1,7 @@
-
-
 """
-   Agora aqui, terá a tela baseado no módulo
-curses do Python. As funções estão aqui embutidas
-para não sobrecarregar o código-fonte principal com
-muito entulho. Isto prejudica na leitura.
+   Agora aqui, terá a tela baseado no módulo curses do Python. As funções 
+ estão aqui embutidas para não sobrecarregar o código-fonte principal com 
+ muito entulho. Isto prejudica na leitura.
 """
 
 # bibliotecas do Python:
@@ -15,18 +12,15 @@ from curses import *
 dimensao = os.get_terminal_size()
 LINHAS, COLUNAS = dimensao.lines, dimensao.columns
 
-# coordenadas dos elementos da tela.
-# da forca:
-
 
 # desenha forca.
 def desenha_forca(janela):
 	# paleta de cores.
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK)
 	# haste da forca.
-	janela.hline(3,8,'#',10, color_pair(3))
+	janela.hline(3, 8,'#',10, color_pair(3))
 	# tronco da forca.
-	janela.vline(3,8,'#', 12, color_pair(3))
+	janela.vline(3, 8,'#', 12, color_pair(3))
 	# base da forca.
 	janela.hline(15, 5, '#', 8, color_pair(3))
 	# gancho da forca.
@@ -142,17 +136,17 @@ def limpa_tabuleiro(qtd_erros, janela):
 	for i in range(qtd_erros): marca_forca(janela)
 
 # gera quadro de resultado da partida.
-def quadro_resultado(l, c, *strings):
-	# string com maior comprimento.
-	max_str_c = max([len(s) for s in strings]) + 2
-	# criando nova janela.
-	nova_janela = newwin(len(strings)+3, max_str_c,l, c)
-	# desenhando borda.
-	nova_janela.border(0,0,0,0,0,0,0,0)
-	# escrevendo nela.
-	for (i,s) in enumerate(strings): nova_janela.addstr(i+1, 1,s)
-	# mostrando...
-	nova_janela.refresh()
+def quadro_resultado(lin: int, col: int, *strings):
+   # String com maior comprimento.
+   comprimento = max([len(s) for s in strings]) + 2
+   # criando nova janela.
+   nova_janela = newwin(len(strings)+3, comprimento, lin, col)
+   # desenhando borda.
+   nova_janela.border(0,0,0,0,0,0,0,0)
+
+   for (i,s) in enumerate(strings):
+      nova_janela.addstr(i+1, 1,s)
+   nova_janela.refresh()
 
 #  Filtra tela após termino do jogo.
 def captura_tela(janela):
@@ -165,3 +159,25 @@ def captura_tela(janela):
 	for l in range(1, LINHAS-1):
 		string += bytestr_to_str(janela.instr(l,1,COLUNAS-2)) + '\n'
 	return string
+
+# == == == == == == == == == == == === == == == == == == == == == == == ===
+#                          Testes Unitários
+# == == == == == == == == == == == === == == == == == == == == == == == ===
+import unittest, curses
+
+class CoresDoCurses(unittest.TestCase):
+   def runTest(self):
+      print("curses.COLOR_BLUE:", curses.COLOR_BLUE)
+      print("curses.COLOR_YELLOW:", curses.COLOR_YELLOW)
+      print("curses.COLOR_RED:", curses.COLOR_RED)
+      print("curses.COLOR_CYAN:", curses.COLOR_CYAN)
+      print("curses.COLOR_GREEN:", curses.COLOR_GREEN)
+      print("curses.COLOR_BLACK:", curses.COLOR_BLACK)
+
+class DefinindoUmNovoPar(unittest.TestCase):
+   def runTest(self):
+      J = initscr()
+      start_color()
+      print("Total de cores:", curses.COLORS)
+      #init_pair(93, COLOR_YELLOW, COLOR_BLUE)
+      endwin()
